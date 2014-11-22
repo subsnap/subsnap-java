@@ -1,0 +1,196 @@
+/**
+ * Subsnap
+ * --------------------------
+ */
+
+description = ""
+
+buildscript {
+    repositories {
+	mavenCentral()
+        mavenLocal()
+    }
+    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE") }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'spring-boot'
+apply plugin: 'jacoco'
+apply plugin: 'jetty'
+apply plugin: 'war'
+apply plugin: 'application'
+
+mainClassName = 'co.subsnap.App'
+
+ext.environment = project.hasProperty('environment') ? environment: 'development';
+logger.info("Environment is set to \"${environment}\"");
+
+/* unless we're building for a release, we generate snapshots */
+version = hasProperty('environment') && environment == 'release' ?
+        currentVersion : "${currentVersion}-SNAPSHOT";
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+    flatDir {
+        name 'Unresolved Dependencies'
+        dirs 'localRepo'
+    }
+}
+
+dependencies {
+    compile 'com.google.guava:guava:14.0.1',
+    'org.json:json:20090211',
+    'com.fasterxml.jackson.core:jackson-annotations:2.3.0',
+    'com.fasterxml.jackson.core:jackson-core:2.3.3',
+    'com.fasterxml.jackson.core:jackson-databind:2.3.3',
+    'org.codehaus.jackson:jackson-core-asl:1.9.13',
+    'org.codehaus.jackson:jackson-mapper-asl:1.9.13',
+    'org.springframework:spring-webmvc:3.2.2.RELEASE',
+    'org.apache.commons:commons-io:1.3.2',
+    'org.apache.commons:commons-lang3:3.1',
+    'javax.validation:validation-api:1.1.0.Final',
+    'org.hibernate:hibernate-validator:5.0.3.Final',
+    'org.javassist:javassist:3.18.2-GA',
+    'com.google.code.gson:gson:2.2.4',
+    'org.springframework.hateoas:spring-hateoas:0.9.0.RELEASE',
+    'org.springframework.data:spring-data-rest-webmvc:2.0.2.RELEASE',
+    'mysql:mysql-connector-java:5.1.34'
+    'joda-time:joda-time:2.2'    
+
+    // Exclude some tiles dependencies so that correct version of javassist can get through
+    compile('org.apache.tiles:tiles-extras:3.0.1') { exclude module: 'javassist' }
+    compile('org.apache.httpcomponents:httpclient:4.3.4') { exclude module: 'commons-logging' }
+    compile('org.springframework.boot:spring-boot-starter-web:1.0.2.RELEASE') { exclude module: 'spring-boot-starter-logging' }
+    compile('org.springframework.boot:spring-boot-starter-data-jpa:1.0.2.RELEASE') { exclude module: 'spring-boot-starter-logging'}
+    compile('org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE') { exclude module: 'spring-boot-starter-logging' }
+    compile('org.springframework.boot:spring-boot-starter-actuator:1.0.2.RELEASE') { exclude module: 'spring-boot-starter-logging'}
+
+    testCompile 'org.javassist:javassist:3.18.2-GA',
+            'org.springframework:spring-test:3.2.2.RELEASE',
+            'org.apache.httpcomponents:httpclient:4.3.4',
+            'net.sourceforge.htmlunit:htmlunit:2.12',
+            'com.github.springtestdbunit:spring-test-dbunit:1.0.0',
+            'org.dbunit:dbunit:2.4.9',
+            'com.jayway.jsonpath:json-path:0.9.1',
+            'com.jayway.jsonpath:json-path-assert:0.8.1',
+            'org.hamcrest:hamcrest-all:1.3'
+
+    testCompile('org.mockito:mockito-all:1.8.5') { exclude module: 'hamcrest-core' }
+    testCompile('junit:junit:4.11') { exclude module: 'hamcrest-core' }
+
+    runtime 'cglib:cglib:2.2.2',
+            'org.slf4j:slf4j-log4j12:1.7.1',
+            'org.slf4j:jcl-over-slf4j:1.7.1'
+            
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    configurations.testCompile
+
+}
+
+// tag::wrapper[]
+task wrapper(type: Wrapper) { gradleVersion = '1.12' }
+// end::wrapper[]
+
+jacocoTestReport {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+}
+
+jacoco { toolVersion = "0.7.1.201405082137" }
+
+
+jar.enabled = true
+
+war {
+    manifest {
+        attributes 'Implementation-Title': project.name,
+        'Implementation-Vendor': 'snubsnap.co',
+        'Implementation-Version': version,
+	'Main-Class': 'org.springframework.boot.loader.WarLauncher',
+	'Start-Class': 'co.subsnap.App'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': project.name,
+        'Implementation-Vendor': 'snubsnap.co',
+        'Implementation-Version': version,
+        'Main-Class': 'org.springframework.boot.loader.JarLauncher',
+        'Start-Class': 'co.subsnap.App'
+    }
+}
+
+
+/*
+ * Defines the test task for the intergration source set
+ */
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+    exclude '**/AbstractIntegrationTest*'
+    systemProperty 'spring.profiles.active', 'default, test'
+}
+
+tasks.withType(Test) {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+    systemProperty 'test.reports.dir', testReportDir
+}
+
+run {
+  systemProperties = System.properties
+}
+
+/*
+ * Initialize the source / resource directories
+ */
+task initialize(type: CreateDirectories) {
+    directories = [
+        sourceSets*.java.srcDirs,
+        sourceSets*.resources.srcDirs,
+        file(webAppDirName)
+    ].flatten()
+}
+
+import java.io.File;
+import java.util.List;
+
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.OutputDirectories;
+import org.gradle.api.tasks.TaskAction;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Custom task to creates directories if they don't already exist
+ */
+class CreateDirectories extends DefaultTask {
+
+    private Logger logger = LoggerFactory.getLogger(CreateDirectories.class);
+
+    @OutputDirectories
+    List<File> directories
+
+    @TaskAction
+    def createDirectories() {
+        directories.each { File directory ->
+            if (!directory.exists()) {
+                logger.warn("Creating ${directory}")
+                directory.mkdirs()
+            }
+        }
+    }
+}
