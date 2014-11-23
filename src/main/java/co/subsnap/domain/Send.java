@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.ser.std.DateSerializer;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.hateoas.ResourceSupport;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -42,17 +43,14 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 	@OneToMany(mappedBy = "sendId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<SendEmail> sendEmails = new HashSet<SendEmail>();
 
-	/*
-	 * @JsonIgnore
-	 * 
-	 * @Transient
-	 * 
-	 * @ManyToOne(fetch = FetchType.LAZY)
-	 * 
-	 * @JoinColumn(name = "project_id", insertable = false, updatable = false)
-	 * 
-	 * @JsonBackReference private Project project;
-	 */
+	
+	  @JsonIgnore	  
+	  @Transient
+	  @ManyToOne(fetch = FetchType.LAZY)
+	  @JoinColumn(name = "project_id", insertable = false, updatable = false)
+	  //@JsonBackReference 
+	  private Project project;
+	 
 
 	@Column(name = "send_date")
 	private Date sendDate;

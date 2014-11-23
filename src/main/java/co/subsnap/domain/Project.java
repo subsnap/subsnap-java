@@ -50,10 +50,10 @@ public class Project extends ResourceSupport implements java.io.Serializable {
     /*
      * TODO 1. Convert fetch to LAZY. Currently getting LazyInitializationException : No Session.
      */
-    @Transient
+    
     @ElementCollection(targetClass = Send.class)
     @OneToMany(mappedBy = "projectId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
+    //@JsonManagedReference
     private Set<Send> Sends;
 
     protected Project() {
