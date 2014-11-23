@@ -31,7 +31,7 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 	@Id
 	@GenericGenerator(name = "reservation_seq", strategy = "increment")
 	@GeneratedValue(generator = "reservation_seq")
-	@Column(name = "send_id", unique = true, nullable = false)
+	@Column(name = "send_id")
 	private Long sendId;
 
 	@Column(name = "project_id")
@@ -41,23 +41,22 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 	 * JOIN TABLE VARIABLES
 	 */
 
+	@Transient
 	@ElementCollection(targetClass = SendEmail.class)
 	@OneToMany(mappedBy = "sendId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<SendEmail> sendEmails = new ArrayList<SendEmail>();
 
-	
-	  @JsonIgnore	  
-	  @Transient
-	  @ManyToOne(fetch = FetchType.LAZY)
-	  @JoinColumn(name = "project_id", insertable = false, updatable = false)
-	  //@JsonBackReference 
-	  private Project project;
-	 
+	@JsonIgnore
+	@Transient
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "project_id", insertable = false, updatable = false)
+	// @JsonBackReference
+	private Project project;
 
 	@Column(name = "send_date")
 	private Date sendDate;
 
-	protected Send() {
+	public Send() {
 		this.sendDate = new Date();
 	}
 
@@ -103,7 +102,7 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 	@Override
 	public String toString() {
 		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(this, SendEmail.class);
+		String json = gson.toJson(this, Send.class);
 
 		return json;
 	}

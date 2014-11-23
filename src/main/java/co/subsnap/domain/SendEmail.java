@@ -7,12 +7,13 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.hateoas.ResourceSupport;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
 @Entity
-@Table(name = "send_emails", uniqueConstraints = { @UniqueConstraint(columnNames = {"send_id", "send_email_address"}) }, indexes = { @Index(columnList = "SEND_ID"), @Index(columnList = "SEND_EMAIL_ADDRESS") })
+@Table(name = "send_emails", uniqueConstraints = { @UniqueConstraint(columnNames = {"send_email_id"}) }, indexes = { @Index(columnList = "SEND_EMAIL_ID")})
 public class SendEmail extends ResourceSupport implements java.io.Serializable {
 
     /**
@@ -22,10 +23,11 @@ public class SendEmail extends ResourceSupport implements java.io.Serializable {
 
     @Id
     @GenericGenerator(name = "reservation_seq", strategy = "increment")
-    @GeneratedValue(generator = "reservation_seq")    @Column(name = "send_email_id", unique = true, nullable = false)
+    @GeneratedValue(generator = "reservation_seq")
+    @Column(name = "send_email_id", unique = true, nullable = false)
     private Long sendEmailId;
     
-    @Column(name = "send_id", unique = true, nullable = false)
+    @Column(name = "send_id")
     private Long sendId;
 
     @Column(name = "send_email_name")
@@ -43,8 +45,13 @@ public class SendEmail extends ResourceSupport implements java.io.Serializable {
     @Column(name = "send_email_body")
     private String sendEmailBody;
     
+	@JsonIgnore
+	@Transient
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "send_id", insertable = false, updatable = false)
+	private Send send;
 
-    protected SendEmail() {
+    public SendEmail() {
 
     }
 
@@ -91,19 +98,19 @@ public class SendEmail extends ResourceSupport implements java.io.Serializable {
 		this.isWatermarked = isWatermarked;
 	}
 
-	public String getEmailTitle() {
+	public String getSendEmailTitle() {
 		return sendEmailTitle;
 	}
 
-	public void setEmailTitle(String emailTitle) {
+	public void setSendEmailTitle(String emailTitle) {
 		this.sendEmailTitle = emailTitle;
 	}
 
-	public String getEmailBody() {
+	public String getSendEmailBody() {
 		return sendEmailBody;
 	}
 
-	public void setEmailBody(String emailBody) {
+	public void setSendEmailBody(String emailBody) {
 		this.sendEmailBody = emailBody;
 	}
 

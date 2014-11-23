@@ -8,6 +8,8 @@ import co.subsnap.service.SendEmailRepository;
 import co.subsnap.service.SendRepository;
 
 import org.apache.commons.collections.IteratorUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +26,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class IndexController {
-
+	private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
+	
 	@Autowired
 	ProjectService projectService;
 	
@@ -50,7 +53,7 @@ public class IndexController {
 		return IteratorUtils.toList(this.projectService.getProjectRepo().findAll().iterator());
 	}
 
-	@RequestMapping(value = "projects/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = { "application/json" })
+	@RequestMapping(value = "projects", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = { "application/json" })
     @ResponseStatus(value = HttpStatus.CREATED)
 	@ResponseBody
 	public Project createProject(@RequestBody Project project) {
@@ -112,6 +115,26 @@ public class IndexController {
 	public SendEmail createSendEmails(@RequestBody SendEmail email) {
 
 		return this.sendEmailRepository.save(email);
+	}
+	
+	@RequestMapping(value = "sendEmails/{projectId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = { "application/json" })
+    @ResponseStatus(value = HttpStatus.CREATED)
+	@ResponseBody
+	public SendEmail createSendAndSendEmails(@PathVariable(value = "projectId") String id, @RequestBody SendEmail email) {
+		Send toCreateSend = new Send();
+		toCreateSend.setProjectId(Long.parseLong(id));
+		logger.info("TO BE CREATED SEND:" + toCreateSend.toString());
+		Send send = this.createSends(toCreateSend);
+		logger.info("CREATE SEND:" + send.toString());
+
+		//SendEmail email = new SendEmail();
+		String sendId = send.getSendId().toString();
+		email.setSendId(Long.parseLong(sendId));
+		logger.info("TO BE CREATED EMAIL:" + email.toString());
+
+		SendEmail result = this.createSendEmails(email);
+		logger.info("CREATED EMAIL:" + result.toString());
+		return result;
 	}
 	
 }
