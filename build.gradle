@@ -155,6 +155,8 @@ run {
   systemProperties = System.properties
 }
 
+task stage(dependsOn: ['clean', 'installApp'])
+
 /*
  * Initialize the source / resource directories
  */
