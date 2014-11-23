@@ -16,7 +16,6 @@ import org.codehaus.jackson.map.ser.std.DateSerializer;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.hateoas.ResourceSupport;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

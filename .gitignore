@@ -1,6 +1,6 @@
-/build/
+build
 /bin/
-.gradle/
+.gradle
 build/classes
 libs
 classes

@@ -1,6 +1,3 @@
-/**
- * Copyright © 2014 salesforce.com, inc. All rights reserved.
- */
 package co.subsnap.config;
 
 import static co.subsnap.constants.DatabaseConstants.ENTITYMANAGER_PACKAGES_TO_SCAN;
