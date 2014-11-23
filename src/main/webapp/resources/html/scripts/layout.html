@@ -1,21 +1,28 @@
 <div class="btn btn-primary" ng-click="goNext('/scripts/new')">Add Script</div>
 <h2 class="sub-header">Your Scripts</h2>
+<p>Show me all <input class=""></p>
 
 <div class="table-responsive" ng-controller="ScriptController">
   <table ng-table="tableParams" class="table ng-scope ng-table">
-    <thead class="ng-scope">
-      <tr>
-          <th>Project Name</th>
-          <th>Budget</th>
-      </tr>
-    </thead>
     <tbody>
       <tr ng-repeat="user in users" class="ng-scope">
-          <td data-title="'ProjectName'" sortable="'projectName'" class="ng-binding">
+          <td data-title="'Date Submitted'" sortable="'dateSubmitted'" class="ng-binding">
+            {{user.dateSubmitted | date}}
+          </td>
+          <td data-title="'Project Name'" sortable="'projectName'" class="ng-binding">
             {{user.projectName}}
           </td>
-          <td data-title="'budget'" sortable="'budget'" class="ng-binding">
-            {{user.budget}}
+          <td data-title="'Genre'" sortable="'genre'" class="ng-binding">
+            {{user.genre}}
+          </td>
+          <td data-title="'Tagline'" sortable="'tagline'" class="ng-binding">
+            {{user.tagline}}
+          </td>
+          <td data-title="'Budget'" sortable="'purpose'" class="ng-binding">
+            {{user.purpose}}
+          </td>
+          <td>
+            <button class="btn btn-primary" ng-click="sendEmail(user)">Send</button>
           </td>
       </tr>
     </tbody>
