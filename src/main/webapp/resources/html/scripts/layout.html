@@ -1,6 +1,6 @@
 <div class="btn btn-primary" ng-click="goNext('/scripts/new')">Add Script</div>
 <h2 class="sub-header">Your Scripts</h2>
-<p>Show me all <input class=""></p>
+<!-- <p>Show me all <input class=""></p> -->
 
 <div class="table-responsive" ng-controller="ScriptController">
   <table ng-table="tableParams" class="table ng-scope ng-table">
@@ -17,10 +17,10 @@
     <tbody>
       <tr ng-repeat="project in projects" class="ng-scope">
           <td data-title="'Date Submitted'" sortable="'dateSubmitted'" class="ng-binding">
-            {{project.dateSubmitted | date}}
+            {{project.projectDate | date}}
           </td>
           <td data-title="'Project Name'" sortable="'writer'" class="ng-binding">
-            {{project.name}}
+            {{project.projectName}}
           </td>
           <td data-title="'Writer'" sortable="'writer'" class="ng-binding">
             {{project.writer}}
