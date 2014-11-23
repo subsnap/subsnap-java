@@ -36,9 +36,12 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	                </map>
                 </property>
         </bean>
+        <mvc:default-servlet-handler />
+        <!--
 	<bean id="jspViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/jsp/" />
-		<property name="suffix" value=".jsp" />
+		<property name="prefix" value="/WEB-INF/html/" />
+		<property name="suffix" value=".html" />
 	</bean>
+	-->
 </beans>

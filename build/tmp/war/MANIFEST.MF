@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: subsnap
-Implementation-Vendor: snubsnap.co
-Implementation-Version: 0.1-SNAPSHOT
-Main-Class: org.springframework.boot.loader.WarLauncher
-Start-Class: co.subsnap.App
-
