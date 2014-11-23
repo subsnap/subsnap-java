@@ -61,7 +61,7 @@ public class Project extends ResourceSupport implements java.io.Serializable {
     @ElementCollection(targetClass = Send.class)
     @OneToMany(mappedBy = "projectId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonManagedReference
-    private Set<Send> Sends;
+    private List<Send> Sends = new ArrayList<Send>();
 
     protected Project() {
     	this.projectDate = new Date();
@@ -95,11 +95,11 @@ public class Project extends ResourceSupport implements java.io.Serializable {
     }
 
 
-    public Set<Send> getSends() {
+    public List<Send> getSends() {
 		return Sends;
 	}
 
-	public void setSends(Set<Send> sends) {
+	public void setSends(List<Send> sends) {
 		Sends = sends;
 	}
 

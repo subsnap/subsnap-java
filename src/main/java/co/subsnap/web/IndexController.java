@@ -42,7 +42,7 @@ public class IndexController {
 		return this.projectService.getProjectRepo().findByProjectId(Long.parseLong(projectId)).get(0);
 	}
 
-	@RequestMapping(value = "projects/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "projects", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public List<Project> getAllProjects() {
