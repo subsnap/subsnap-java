@@ -43,6 +43,13 @@ public class Project extends ResourceSupport implements java.io.Serializable {
     @Column(name = "project_date")
     private Date projectDate;
 
+    private String star;
+    
+    private String director;
+
+    private String writer;
+
+    
     /*
      * JOIN TABLE VARIABLES
      */
@@ -94,6 +101,30 @@ public class Project extends ResourceSupport implements java.io.Serializable {
 
 	public void setSends(Set<Send> sends) {
 		Sends = sends;
+	}
+
+	public String getStar() {
+		return star;
+	}
+
+	public void setStar(String star) {
+		this.star = star;
+	}
+
+	public String getDirector() {
+		return director;
+	}
+
+	public void setDirector(String director) {
+		this.director = director;
+	}
+
+	public String getWriter() {
+		return writer;
+	}
+
+	public void setWriter(String writer) {
+		this.writer = writer;
 	}
 
 	@Override
