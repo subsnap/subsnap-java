@@ -82,7 +82,7 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 	}
 
 	@JsonSerialize(using = DateSerializer.class)
-	public Date getProjectDate() {
+	public Date getSendDate() {
 		return sendDate;
 	}
 

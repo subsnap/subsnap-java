@@ -1,4 +1,4 @@
-/*package co.subsnap.service;
+package co.subsnap.service;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ import co.subsnap.domain.SendEmail;
 
 
 @Repository
-public interface SendEmailRepository extends PagingAndSortingRepository<SendEmail, String> {
+public interface SendEmailRepository extends PagingAndSortingRepository<SendEmail, Long> {
 
     // additional custom finder methods go here
 
-    List<SendEmail> findBySendIdAndSendEmailAddress(String sendId, String sendEmailAddress);
+    List<SendEmail> findBySendIdAndSendEmailAddress(Long sendId, String sendEmailAddress);
 
-  }*/
+  }

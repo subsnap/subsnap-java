@@ -4,6 +4,7 @@ package co.subsnap.domain;
 import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.hateoas.ResourceSupport;
 
 import com.google.gson.Gson;
@@ -32,6 +33,16 @@ public class SendEmail extends ResourceSupport implements java.io.Serializable {
 
     @Column(name = "send_email_address")
     private String sendEmailAddress;
+    
+    @Type(type = "true_false")
+    private boolean isWatermarked;
+    
+    @Column(name = "send_email_title")
+    private String sendEmailTitle;
+    
+    @Column(name = "send_email_body")
+    private String sendEmailBody;
+    
 
     protected SendEmail() {
 
@@ -55,7 +66,48 @@ public class SendEmail extends ResourceSupport implements java.io.Serializable {
         this.sendEmailName = name;
     }
     
-    @Override
+    public String getSendEmailAddress() {
+        return sendEmailAddress;
+    }
+
+    public synchronized void setSendEmailAddress(String name) {
+        this.sendEmailAddress = name;
+    }
+    
+    
+    public Long getSendEmailId() {
+		return sendEmailId;
+	}
+
+	public void setSendEmailId(Long sendEmailId) {
+		this.sendEmailId = sendEmailId;
+	}
+
+	public boolean isWatermarked() {
+		return isWatermarked;
+	}
+
+	public void setWatermarked(boolean isWatermarked) {
+		this.isWatermarked = isWatermarked;
+	}
+
+	public String getEmailTitle() {
+		return sendEmailTitle;
+	}
+
+	public void setEmailTitle(String emailTitle) {
+		this.sendEmailTitle = emailTitle;
+	}
+
+	public String getEmailBody() {
+		return sendEmailBody;
+	}
+
+	public void setEmailBody(String emailBody) {
+		this.sendEmailBody = emailBody;
+	}
+
+	@Override
     public String toString() {
         Gson gson = new GsonBuilder().create();
         String json = gson.toJson(this, SendEmail.class);
