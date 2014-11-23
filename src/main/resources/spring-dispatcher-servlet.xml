@@ -19,7 +19,7 @@ http://www.springframework.org/schema/context
 
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="javabeat.net.spring.controller" />
+	<context:component-scan base-package="co.subsnap.web" />
 	<bean id="userDetails" class="co.subsnap.domain.UserDetails"/>
 	<mvc:annotation-driven content-negotiation-manager="contentManager"/>
 	<bean id="contentManager"
@@ -37,7 +37,15 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
                 </property>
         </bean>
         <mvc:default-servlet-handler />
+        <mvc:resources mapping="/static/**" location="/resources/html/" />
+        <mvc:resources mapping="/resources/**" location="/resources/html/" />
+                <mvc:resources mapping="/js/**" location="/resources/js/" />
+                <mvc:resources mapping="/styles/**" location="/resources/styles/" />
+                <mvc:resources mapping="/vendor/**" location="/resources/vendor/" />
+        
+        
         <!--
+        
 	<bean id="jspViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/html/" />

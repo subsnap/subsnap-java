@@ -15,8 +15,14 @@ import java.util.List;
 @RequestMapping("/")
 public class IndexController {
 
-    @RequestMapping
+    /*@RequestMapping
     public String getIndexPage() {
         return "index.html";
+    }*/
+    
+    @RequestMapping("subsnap")
+    public String getSubsnapPage() {
+        return "index1.html";
     }
+    
 }
