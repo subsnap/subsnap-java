@@ -41,10 +41,9 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 	 * JOIN TABLE VARIABLES
 	 */
 
-	@Transient
 	@ElementCollection(targetClass = SendEmail.class)
 	@OneToMany(mappedBy = "sendId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<SendEmail> sendEmails = new ArrayList<SendEmail>();
+	private List<SendEmail> sendEmails;
 
 	@JsonIgnore
 	@Transient
