@@ -46,7 +46,6 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 
     @ElementCollection(targetClass = SendEmail.class)
     @OneToMany(mappedBy = "sendId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
     private Set<SendEmail> sendEmails = new HashSet<SendEmail>();
 
 /*    @JsonIgnore
