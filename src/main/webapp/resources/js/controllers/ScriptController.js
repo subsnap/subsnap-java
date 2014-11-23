@@ -7,8 +7,8 @@
 
 var subSnapControllers = angular.module('subSnapControllers', ['ngTable','ui.bootstrap']);
 
-subSnapControllers.controller('ScriptController', ['$scope', '$http', '$modal',
-  function ($scope, $http, $modal) {
+subSnapControllers.controller('ScriptController', ['$scope', '$http', '$modal', 'SendEmail',
+  function ($scope, $http, $modal, SendEmail) {
     $scope.goNext = function (hash) { 
         $location.path(hash);
     };
@@ -36,6 +36,27 @@ subSnapControllers.controller('ScriptController', ['$scope', '$http', '$modal',
         });
 
         resultPromise.result.then(function(message) {
+            var send = new SendEmail({
+                to: message.email,
+                toName: message.name,
+                subject: message.title,
+                text: message.body,
+                                    api_user: 'subsnap',
+                    api_key: '5195Wint!',
+                    from: 'Jenny@subsnap.com'
+            }, function () {
+                alert(response);
+            });
+            send.$save();
+
+
+            // Movie.get({ id: $scope.id }, function() {
+            //   // $scope.entry is fetched from server and is an instance of Entry
+            //     $scope.entry.data = 'something else';
+            //     $scope.entry.$delete(function() {
+            //     //gone forever!
+            // });
+// });
             // alert('email sent!!!' + message);
             // @TODO post result to server
         });
@@ -64,7 +85,7 @@ subSnapControllers.controller('EmailController', function ($scope, $modalInstanc
 
     $scope.project = project;
     $scope.message = {
-        project: project.projectId,
+        projectId: project.projectId,
         name: '',
         email: '',
         isWatermarked: false,
