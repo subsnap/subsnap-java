@@ -2,6 +2,30 @@
 
 /* Services */
 
-var AppServices = angular.module('SubSnap.services', []);
+var AppServices = angular.module('subSnapServices', ['ngResource']);
 
-AppServices.value('version', '0.1');
+AppServices.factory('Project', ['$resource',
+    function($resource){
+        return $resource('projects', {}, {
+            query: { 
+                method:'GET', 
+                params:{projectId:'projects'}, 
+                isArray: true}
+            }
+        );
+    }
+]);
+
+AppServices.factory('Message', ['$resource',
+    function($resource){
+        return $resource('messages', {}, {
+            query: { 
+                method:'POST', 
+                params: { 
+                    projectId:'projects' 
+                }, 
+                isArray: true
+            }
+        });
+    }
+]);

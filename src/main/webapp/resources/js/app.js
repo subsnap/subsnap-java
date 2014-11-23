@@ -4,8 +4,8 @@ var SubSnapApp = {};
 
 var App = angular.module('SubSnap', [
     // 'SubSnap.filters', 
-    // 'SubSnap.services', 
     // 'SubSnap.directives', 
+    // 'subSnapServices', 
     'subSnapControllers',
     'ngTable',
     'ngRoute'

@@ -4,25 +4,35 @@
 
 <div class="table-responsive" ng-controller="ScriptController">
   <table ng-table="tableParams" class="table ng-scope ng-table">
+    <thead>
+      <tr>
+        <td>Date</td>
+        <td>Project Name</td>
+        <td>Writer</td>
+        <td>Director</td>
+        <td>Star</td>
+        <td>Tools</td>
+      </tr>
+    </thead>
     <tbody>
-      <tr ng-repeat="user in users" class="ng-scope">
+      <tr ng-repeat="project in projects" class="ng-scope">
           <td data-title="'Date Submitted'" sortable="'dateSubmitted'" class="ng-binding">
-            {{user.dateSubmitted | date}}
+            {{project.dateSubmitted | date}}
           </td>
-          <td data-title="'Project Name'" sortable="'projectName'" class="ng-binding">
-            {{user.projectName}}
+          <td data-title="'Project Name'" sortable="'writer'" class="ng-binding">
+            {{project.name}}
           </td>
-          <td data-title="'Genre'" sortable="'genre'" class="ng-binding">
-            {{user.genre}}
+          <td data-title="'Writer'" sortable="'writer'" class="ng-binding">
+            {{project.writer}}
           </td>
-          <td data-title="'Tagline'" sortable="'tagline'" class="ng-binding">
-            {{user.tagline}}
+          <td data-title="'Director'" sortable="'director'" class="ng-binding">
+            {{project.director}}
           </td>
-          <td data-title="'Budget'" sortable="'purpose'" class="ng-binding">
-            {{user.purpose}}
+          <td data-title="'Star'" sortable="'star'" class="ng-binding">
+            {{project.star}}
           </td>
           <td>
-            <button class="btn btn-primary" ng-click="sendEmail(user)">Send</button>
+            <button class="btn btn-primary" ng-click="sendEmail(project)">Send</button>
           </td>
       </tr>
     </tbody>
