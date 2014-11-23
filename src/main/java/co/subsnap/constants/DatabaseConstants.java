@@ -16,7 +16,7 @@ public class DatabaseConstants {
      * Hibernate Configuration:
      */
 
-    public final static String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.salesforce.belvedere.domain.jpa";
+    public final static String ENTITYMANAGER_PACKAGES_TO_SCAN = "co.subsnap.domain";
     
     public static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
     public static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";

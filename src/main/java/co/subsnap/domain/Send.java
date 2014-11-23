@@ -1,0 +1,112 @@
+/**
+ * Copyright © 2014 salesforce.com, inc. All rights reserved.
+ */
+package co.subsnap.domain;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.*;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.ser.std.DateSerializer;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.hateoas.ResourceSupport;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import co.subsnap.domain.SendEmail;
+
+@Entity
+@Table(name = "sends", uniqueConstraints = { @UniqueConstraint(columnNames = "send_id") }, indexes = { @Index(columnList = "SEND_ID") })
+public class Send extends ResourceSupport implements java.io.Serializable {
+
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 6221630110575114725L;
+
+    @Id
+    @GenericGenerator(name = "reservation_seq", strategy = "increment")
+    @GeneratedValue(generator = "reservation_seq")
+    @Column(name = "send_id", unique = true, nullable = false)
+    private Long sendId;
+
+    @Column(name = "project_id")
+    private Long projectId;
+
+    /*
+     * JOIN TABLE VARIABLES
+     */
+
+    @ElementCollection(targetClass = SendEmail.class)
+    @OneToMany(mappedBy = "sendId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+    private Set<SendEmail> sendEmails = new HashSet<SendEmail>();
+
+/*    @JsonIgnore
+    @Transient
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", insertable = false, updatable = false)
+    @JsonBackReference
+    private Project project;*/
+
+    @Column(name = "send_date")
+    private Date sendDate;
+
+    protected Send() {
+    	this.sendDate = new Date();
+    }
+
+    // getter and setter methods
+
+    public Long getSendId() {
+        return sendId;
+    }
+
+    public synchronized void setSendId(Long unique_id) {
+        this.sendId = unique_id;
+    }
+
+    // Join Column
+    public Set<SendEmail> getSendMail() {
+
+        return this.sendEmails;
+    }
+    
+    // Join Column
+    public void setSendEmail(Set<SendEmail> emails) {
+
+        this.sendEmails = emails;
+    }
+
+    @JsonSerialize(using = DateSerializer.class)
+    public Date getProjectDate() {
+        return sendDate;
+    }
+
+    public synchronized void setSendDate(Date date) {
+        this.sendDate = date;
+    }
+    
+    public Long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
+	}
+
+	@Override
+    public String toString() {
+        Gson gson = new GsonBuilder().create();
+        String json = gson.toJson(this, SendEmail.class);
+
+        return json;
+    }
+}
