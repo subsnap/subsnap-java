@@ -4,3 +4,9 @@
 .ng-table {
   border: 1px solid #000;
 }
+.modal-backdrop {
+  height: 100%;
+}
+form {
+  padding-bottom: 5px;
+}
