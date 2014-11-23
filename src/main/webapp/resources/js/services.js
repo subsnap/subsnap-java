@@ -2,6 +2,6 @@
 
 /* Services */
 
-var AppServices = angular.module('AngularSpringApp.services', []);
+var AppServices = angular.module('SubSnap.services', []);
 
 AppServices.value('version', '0.1');
