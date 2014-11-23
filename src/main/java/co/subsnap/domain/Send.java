@@ -1,7 +1,9 @@
 package co.subsnap.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -41,7 +43,7 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 
 	@ElementCollection(targetClass = SendEmail.class)
 	@OneToMany(mappedBy = "sendId", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<SendEmail> sendEmails = new HashSet<SendEmail>();
+	private List<SendEmail> sendEmails = new ArrayList<SendEmail>();
 
 	
 	  @JsonIgnore	  
@@ -70,13 +72,13 @@ public class Send extends ResourceSupport implements java.io.Serializable {
 	}
 
 	// Join Column
-	public Set<SendEmail> getSendMail() {
+	public List<SendEmail> getSendMail() {
 
 		return this.sendEmails;
 	}
 
 	// Join Column
-	public void setSendEmail(Set<SendEmail> emails) {
+	public void setSendEmail(List<SendEmail> emails) {
 
 		this.sendEmails = emails;
 	}
