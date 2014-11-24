@@ -22,10 +22,16 @@ subSnapControllers.controller('ScriptController', ['$scope', '$http', '$modal', 
     // ];
     
     $scope.projects = Project.query({}, function (projects) {
+
         for (var i = projects.length - 1; i >= 0; i--) {
             projects[i].showLog = false;
+            if (projects[i].projectName === "The Social Network") {
+                projects[i].isNew = true;
+            } else {
+                projects[i].isNew = false;
+            }
         }
-        return projects;
+        return projects.reverse();
     });
 
     // $scope.getSends = function (project) {
@@ -54,19 +60,36 @@ subSnapControllers.controller('ScriptController', ['$scope', '$http', '$modal', 
         });
 
         resultPromise.result.then(function(message) {
-            var sendEmail = new SendEmail();
-            sendEmail.$PostSend({
-                projectId: message.projectId,
-                sendMail: [
-                    {
-                        sendEmailName: message.toName,
-                        sendEmailAddress: message.email,
-                        isWatermarked: message.isWatermarked,
-                        sendEmailTitle: message.title,
-                        sendEmailBody: message.body
-                    }
-                ]
+            $http({
+                method:'POST',
+                url: '/sendEmails/' + message.projectId,
+                data: {
+                    // projectId: message.projectId,
+                    sendEmailName: message.toName,
+                    sendEmailAddress: message.email,
+                    // isWatermarked: message.isWatermarked,
+                    sendEmailTitle: message.title,
+                    sendEmailBody: message.body
+                
+                }
+
+            }).success(function () {
+                window.location.reload();
             });
+            // var sendEmail = SendEmail.$save({id: message.projectId}, function () { 
+            //     return {
+            //         projectId: message.projectId,
+            //         sendEmailName: message.toName,
+            //         sendEmailAddress: message.email,
+            //         isWatermarked: message.isWatermarked,
+            //         sendEmailTitle: message.title,
+            //         sendEmailBody: message.body
+                
+            //     };
+            // });
+
+
+            // sendEmail.$PostSend();
 
             // var send = new SendGridEmail({
             //     to: message.email,
@@ -114,8 +137,21 @@ subSnapControllers.controller('EmailController', function ($scope, $modalInstanc
         body: assembleMessage(project)
     };
 
-    $scope.contactNames = ["Ari Gold", "Alex Trebeck", "Aston Kutcher", "James Franco", "Quentin Tarantino", "Bret Easton Ellis"];
+    $scope.contactNames = ["Ari Gold", "Alex Trebeck", "Aston Kutcher", "James Franco", "Quentin Tarantino", "Bret Easton Ellis", "Dale Knauss"];
+    $scope.contacts = [
+        { name: "Ari Gold", email: "Ari@Gold.com" }, 
+        { name: "Alex Trebeck", email: "Alex@Trebeck.com" },
+        { name: "Aston Kutcher", email: "Alex@Trebeck.com" },
+        { name: "James Franco", email: "Alex@Trebeck.com" },
+        { name: "Quentin Tarantino", email: "Alex@Trebeck.com" },
+        { name: "Bret Easton Ellis", email: "Alex@Trebeck.com" },
+        { name: "Dale Knauss", email: "daleknauss@gmail.com" },
+        { name: "Dave Groll", email: "dave@groll.com"}
+    ];
 
+    $scope.onNameSelect = function(contact) {
+        $scope.message.email = contact.email;
+    };
 
     $scope.firstName = function () {
         var name = $scope.message.toName;

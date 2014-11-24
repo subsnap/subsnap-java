@@ -95,6 +95,7 @@ tr {
 	background-color: #f5f2f2;
 	margin: 0 0 5px 0;
 	padding: 0;
+	height: 50px !important;
 }
 
 .details:hover td {
@@ -113,7 +114,7 @@ tr:hover .send img, tr:hover .delete img {
 }
 
 td {
-	padding: 10px;
+	padding: 10px !important;
 }
 
 .title {
@@ -222,4 +223,14 @@ td {
 
 .no_padding {
 	padding: 0 !important;
+}
+
+.navigation li.profile-image {
+	padding-left: 0;
+}
+.navigation li.profile-image:hover {
+	background-color: inherit;
+}
+.profile-image img {
+	width: 100%;
 }

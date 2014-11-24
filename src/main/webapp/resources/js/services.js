@@ -18,9 +18,9 @@ AppServices.factory('Project', ['$resource',
 
 AppServices.factory('SendEmail', ['$resource',
     function($resource) {
-        return $resource('/sends/:id', {}, {
-            PostSend: { method:'POST', params: {} },
-            GetSends: { method: 'GET', params: { id: 0 } }
+        return $resource('/sendEmails/:id', {id: "@id"}, {
+            method:'POST',
+            // GetSends: { method: 'GET', params: { id: 0 } }
 
 
             // query: { 

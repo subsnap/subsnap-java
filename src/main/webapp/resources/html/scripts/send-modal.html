@@ -5,7 +5,7 @@
     <form class="form-inline" role="form">
         <div class="form-group">
             <label for="recipientName">Name:</label>
-            <input type="text" ng-model="message.toName" typeahead="name for name in contactNames | filter:$viewValue | limitTo:8" class="form-control">
+            <input type="text" ng-model="message.toName" typeahead="contact.name for contact in contacts | filter:$viewValue | limitTo:8" typeahead-on-select="onNameSelect($item, $model, $label)" class="form-control">
             <!-- <input ng-model="message.name" id="recipientName" class="form-control" placeholder="Enter Recipient"> -->
         </div>
         <div class="form-group">

@@ -7,15 +7,16 @@
     <link rel="stylesheet" href="../styles/main.css"/>
         <link rel="stylesheet" href="../styles/app.css"/>
 
-    <!-- <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css" />
 </head>
 <body>
   <!-- Logo -->
   <a href="#"><img src="../img/logo.jpg" alt="Subsnap" class="logo" /></a>
 
-    
+  
   <!-- Navigation -->
   <ul class="navigation">
+    <li class="profile-image"><img src="../img/profile.png" alt="Profile" /></li>
     <li class="incoming active"><a href="index.html?inout=incoming">Incoming</a></li>
     <li class="outgoing"><a href="index.html?inout=outgoing">Outgoing</a></li>
   </ul>
@@ -31,7 +32,7 @@
     </table>
 
     <table class="today"  ng-repeat="project in projects">
-      <tr  class="details new">
+      <tr  class="details" ng-class="{new: project.isNew}">
         <td class="submitted">{{project.projectDate | date}}</td>
         <td class="project">{{project.projectName}}</td>
         <td class="view" ng-click="toggleLogs($index)" ><img src="../img/view_white.svg" alt="View" /></td>
@@ -50,8 +51,8 @@
             </tr>
             <tr class="log_row" ng-repeat="send in project.sends">
               <td class="sent">{{send.sendDate | date}}</td>
-              <td class="to">Fake Person 1</td>
-              <td class="email">fake@emailaddress.com</td>
+              <td class="to">{{send.sendMail[0].sendEmailName}}</td>
+              <td class="email">{{send.sendMail[0].sendEmailAddress}}</td>
               <td class="delete"><img src="../img/delete.svg" alt="Delete" /></td>
             </tr>
             <tr class="log_row" ng-hide="hasLogs(project)" >
