@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+
+import com.sendgrid.SendGrid;
+import com.sendgrid.SendGridException;
 
 import java.util.List;
 
@@ -36,6 +44,9 @@ public class IndexController {
 	
 	@Autowired
 	private SendEmailRepository sendEmailRepository;
+	
+	@Autowired
+	private JavaMailSenderImpl mailSender;
 
 	@RequestMapping(value = "projects/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -120,7 +131,7 @@ public class IndexController {
 	@RequestMapping(value = "sendEmails/{projectId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = { "application/json" })
     @ResponseStatus(value = HttpStatus.CREATED)
 	@ResponseBody
-	public SendEmail createSendAndSendEmails(@PathVariable(value = "projectId") String id, @RequestBody SendEmail email) {
+	public SendEmail createSendAndSendEmails(@PathVariable(value = "projectId") String id, @RequestBody SendEmail email) throws SendGridException {
 		Send toCreateSend = new Send();
 		toCreateSend.setProjectId(Long.parseLong(id));
 		logger.info("TO BE CREATED SEND:" + toCreateSend.toString());
@@ -130,10 +141,25 @@ public class IndexController {
 		//SendEmail email = new SendEmail();
 		String sendId = send.getSendId().toString();
 		email.setSendId(Long.parseLong(sendId));
-		logger.info("TO BE CREATED EMAIL:" + email.toString());
-
+		logger.info("TO BE CREATED EMAIL:" + email.toString());		
 		SendEmail result = this.createSendEmails(email);
 		logger.info("CREATED EMAIL:" + result.toString());
+/*		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(result.getSendEmailAddress());
+		message.setSubject(email.getSendEmailTitle());
+		message.setText(email.getSendEmailBody());
+		//message.setFrom("info@subsnap.com");
+		mailSender.send(message);;*/
+		SendGrid sendgrid = new SendGrid("subsnap", "5195Wint!");
+	    SendGrid.Email message = new SendGrid.Email();
+	    message.addTo(result.getSendEmailAddress());
+		message.setSubject(email.getSendEmailTitle());
+		message.setText(email.getSendEmailBody());
+		message.setFrom("info@subsnap.com");
+		
+		SendGrid.Response response = sendgrid.send(message);
+	    logger.info(response.getMessage());		
+		
 		return result;
 	}
 	

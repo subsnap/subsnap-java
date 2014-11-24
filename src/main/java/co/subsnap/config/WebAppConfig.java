@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 
 @Configuration
@@ -99,5 +100,17 @@ public class WebAppConfig extends WebMvcConfigurationSupport {
                     CLASSPATH_RESOURCE_LOCATIONS);
         }
     }
+    
+    @Bean
+    public JavaMailSenderImpl getMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+        mailSender.setPort(587);
+        mailSender.setHost("smtp.sendgrid.net");
+        mailSender.setUsername("subsnap");
+        mailSender.setPassword("5195Wint!");
+        return mailSender;
+    }
+
     
 }
